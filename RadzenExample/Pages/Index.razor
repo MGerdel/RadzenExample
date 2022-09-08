@@ -1,9 +1,31 @@
 ﻿@page "/"
+@inherits IndexBase
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<RadzenDataGrid @ref="@DataGridDraft" ShowPagingSummary="true" Page="@(OnPageChangedDraft)" PagingSummaryFormat="@($"{FromElementDraft}-{ToElementDraft} of {{2}}")" Count="@CountDraft" 
+				Data="@Models.Where(x => x.Status is Status.Draft)" TItem="Model" AllowSorting="true" AllowPaging="true" PageSize="@PageSizeDraft" EmptyText="EmptyText">
+	<Columns>
+		<RadzenDataGridColumn TItem="Model" Property="@nameof(Model.Name)" Title="Name" Width="230px">
+			<Template Context="context">
+				<span class="table-text" title="@context.Name">@context.Name</span>
+			</Template>
+		</RadzenDataGridColumn>
+		<RadzenDataGridColumn TItem="Model" Property="@nameof(Model.Author)" Title="Author" Width="206px">
+			<Template Context="context">
+				<span class="table-text" title="@context.Author">@context.Author</span>
+			</Template>
+		</RadzenDataGridColumn>
+		<RadzenDataGridColumn TItem="Model" Property="@nameof(Model.CreatedAt)" Title="CreatedAt" Width="206px">
+			<Template Context="context">
+				<span class="table-text" title="@GetTextOrDefault(context.CreatedAt))">@GetTextOrDefault(context.CreatedAt)</span>
+			</Template>
+		</RadzenDataGridColumn>
+	</Columns>
+</RadzenDataGrid>
 
-Welcome to your new app.
+@code {
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    private string GetTextOrDefault(DateTime? time) => time?.ToString("u") ?? "-";
+
+}
